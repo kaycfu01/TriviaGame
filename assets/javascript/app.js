@@ -70,3 +70,42 @@ $(document).ready(function () {
         answerList: ["Squirtle", "Pikachu", "Rhydon", "Mewtwo"],
         answer: 2
     }];
+
+    //function to start timer and tally results at zero seconds
+    function startTimer() {
+        if (timer > 1) {
+            timer--;
+            $("#timer").text("Time Remaining: " + timer + " seconds")
+        } else if (currentQuestion < 14) {
+            unanswered++;
+            currentQuestion++;
+            writeQuestion();
+        } else {
+            unanswered++;
+            showResults();
+        };
+    };
+
+    //function to write out the questions, possible answers, and finished button
+    function writeQuestion() {
+        timer = 25;
+
+        $("#questions").html(triviaQuestions[currentQuestion].question + "<br><input type='radio' name='answers' class='answers' data-value='0'>" +
+            triviaQuestions[currentQuestion].answerList[0] + "<input type='radio' name='answers' class='answers' data-value='1'>" + triviaQuestions[currentQuestion].answerList[1] +
+            "<input type='radio' name='answers' class='answers' data-value='2'>" + triviaQuestions[currentQuestion].answerList[2] + "<input type='radio' name='answers' class='answers' data-value='3'>" +
+            triviaQuestions[currentQuestion].answerList[3] + "<br><br>");
+
+        //adding submit and skip buttons
+        $("#questions").append("<button id='submit'>Submit</button>");
+        $("#questions").append("<button id='skip'>Skip</button>");
+    };
+
+    //function to stop and reset timer, tally results, generate replay button and reset correct/incorrect
+    function tallyResult() {
+        var playerChoice = $(".answers:checked");
+        if (triviaQuestions[currentQuestion].answer === $(playerChoice).attr("data-value")) {
+            correct++;
+        } else {
+            incorrect++;
+        };
+    };
