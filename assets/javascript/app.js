@@ -109,3 +109,43 @@ $(document).ready(function () {
             incorrect++;
         };
     };
+
+    function showResults() {
+        clearInterval(myTimer);
+        $("#timer").empty();
+        $("#questions").html("Correct answers: " + correct + "<br>Incorrect answers: "
+         + incorrect + "<br>Unanswered questions: " + unanswered + "<br><br><button id='replay'>Replay</button>");
+    }
+
+    //on click event for start button
+    $("#start").on("click", function () {
+        myTimer = setInterval(startTimer, 1000);
+        $("#inner_container").html("<div id='questions'></div>");
+        writeQuestion();
+    });
+
+    //on click events for finished and replay buttons using document to avoid event bubbling issue
+    $(document).on("click", "#submit", function () {
+        if (currentQuestion < 14) {
+            currentQuestion++;
+            tallyResult();
+            writeQuestion();
+        } else {
+            showResults();
+        }
+    });
+
+    //on click events for finished and replay buttons using document to avoid event bubbling issue
+    $(document).on("click", "#skip", function () {
+        unanswered++;
+        currentQuestion++;
+        writeQuestion();
+    });
+
+    //set on click event for replay button using document to avoid event bubbling issue
+    $(document).on("click", "#replay", function () {
+        $("#questions").empty();
+        writeQuestion();
+        startTimer();
+    });
+});
